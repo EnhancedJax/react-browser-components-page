@@ -9,9 +9,10 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@enhanced-jax/react-browser-containers": "^1.0.3",
+    "@enhanced-jax/react-browser-containers": "^1.0.5",
     "framer-motion": "^11.2.13",
     "next": "14.2.4",
+    "popmotion": "^11.0.5",
     "prism-react-renderer": "^2.3.1",
     "react": "^18",
     "react-dom": "^18"
