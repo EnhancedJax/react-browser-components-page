@@ -1,112 +1,161 @@
-import Image from "next/image";
+"use client";
+
+import {
+  ArcBrowser,
+  ChromeBrowser,
+} from "@enhanced-jax/react-browser-containers";
+import { AnimatePresence, motion } from "framer-motion";
+import { Highlight, themes } from "prism-react-renderer";
+import React, { useState } from "react";
+
+const browsers = [
+  { Component: ChromeBrowser, name: "ChromeBrowser" },
+  { Component: ArcBrowser, name: "ArcBrowser" },
+];
 
 export default function Home() {
+  const [currentBrowser, setCurrentBrowser] = useState(0);
+  const [copied, setCopied] = useState(false);
+
+  const copyToClipboard = () => {
+    navigator.clipboard.writeText(
+      "npm i @enhanced-jax/react-browser-containers"
+    );
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  const nextBrowser = () => {
+    setCurrentBrowser((prev) => (prev + 1) % browsers.length);
+  };
+
+  const prevBrowser = () => {
+    setCurrentBrowser((prev) => (prev - 1 + browsers.length) % browsers.length);
+  };
+
+  const tabs = [
+    {
+      name: "Example",
+      link: "https://example.com",
+      content: <div className="p-4">Content goes here</div>,
+      icon: <div className="w-full h-full bg-blue-500 rounded-full" />,
+    },
+  ];
+
+  const implementationCode = `
+import { ${browsers[currentBrowser].name} } from "@enhanced-jax/react-browser-containers";
+import { useState } from "react";
+
+const App = () => {
+  const [tab, setTab] = useState(0);
+  const tabs = [
+    {
+      name: "Example",
+      link: "https://example.com",
+      content: <div>Content</div>,
+      icon: <div className="w-4 h-4 bg-blue-500 rounded-full" />,
+    },
+  ];
+
+  return <${browsers[currentBrowser].name} tab={tab} setTab={setTab} tabs={tabs} />;
+};
+  `;
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">src/app/page.js</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:h-auto lg:w-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+    <main className="min-h-screen px-4 py-12 text-black bg-gray-100 sm:px-6 lg:px-8">
+      <div className="max-w-6xl mx-auto">
+        <h1 className="mb-8 text-4xl font-bold text-center">
+          react-browser-containers
+        </h1>
+
+        <div className="p-4 mb-8 bg-white rounded-lg shadow-md">
+          <Highlight
+            code="npm i @enhanced-jax/react-browser-containers"
+            language="bash"
+            theme={themes.nightOwl}
           >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
+            {({ style, tokens, getLineProps, getTokenProps }) => (
+              <pre className="p-2 rounded" style={style}>
+                {tokens.map((line, i) => (
+                  <div key={i} {...getLineProps({ line })}>
+                    {line.map((token, key) => (
+                      <span key={key} {...getTokenProps({ token })} />
+                    ))}
+                  </div>
+                ))}
+              </pre>
+            )}
+          </Highlight>
+          <button
+            onClick={copyToClipboard}
+            className="px-4 py-2 mt-2 text-white transition-colors bg-blue-500 rounded hover:bg-blue-600"
+          >
+            {copied ? "Copied!" : "Copy"}
+          </button>
         </div>
-      </div>
 
-      <div className="relative flex place-items-center before:absolute before:h-[300px] before:w-full sm:before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-full sm:after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 before:lg:h-[360px] z-[-1]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
+        <div className="flex flex-col gap-8 md:flex-row">
+          <div className="w-full md:w-1/2">
+            <div className="flex items-center justify-between mb-4">
+              <button
+                onClick={prevBrowser}
+                className="px-4 py-2 bg-gray-200 rounded"
+              >
+                Previous
+              </button>
+              <button
+                onClick={nextBrowser}
+                className="px-4 py-2 bg-gray-200 rounded"
+              >
+                Next
+              </button>
+            </div>
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={currentBrowser}
+                initial={{ opacity: 0, x: 100 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -100 }}
+                transition={{ duration: 0.3 }}
+              >
+                {React.createElement(browsers[currentBrowser].Component, {
+                  tabs,
+                  tab: 0,
+                  setTab: () => {},
+                })}
+              </motion.div>
+            </AnimatePresence>
+          </div>
 
-      <div className="mb-32 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Docs{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800 hover:dark:bg-opacity-30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Learn{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Templates{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Explore starter templates for Next.js.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Deploy{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50 text-balance`}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
+          <div className="w-full md:w-1/2">
+            <div className="p-4 bg-white rounded-lg shadow-md">
+              <h2 className="mb-4 text-2xl font-bold">Implementation</h2>
+              <Highlight
+                code={implementationCode.trim()}
+                language="jsx"
+                theme={themes.nightOwl}
+              >
+                {({
+                  className,
+                  style,
+                  tokens,
+                  getLineProps,
+                  getTokenProps,
+                }) => (
+                  <pre className="p-2 overflow-auto rounded" style={style}>
+                    {tokens.map((line, i) => (
+                      <div key={i} {...getLineProps({ line })}>
+                        {line.map((token, key) => (
+                          <span key={key} {...getTokenProps({ token })} />
+                        ))}
+                      </div>
+                    ))}
+                  </pre>
+                )}
+              </Highlight>
+            </div>
+          </div>
+        </div>
       </div>
     </main>
   );
