@@ -8,7 +8,7 @@ export default function Code() {
   const { browsers, index, darkTheme } = useAppContext();
 
   return (
-    <div className="flex flex-col flex-grow w-full p-4 bg-white rounded-lg shadow dark:bg-gray-800">
+    <div className="flex flex-col flex-grow w-full p-4 bg-white rounded-lg shadow dark:bg-gray-800 md:hidden">
       <h2 className="mb-4 text-2xl font-bold">
         {browsers[index][darkTheme ? "dark" : "light"]?.title ||
           browsers[index].title}
