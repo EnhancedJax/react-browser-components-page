@@ -11,7 +11,7 @@ export default function InstallationCode() {
   return (
     <div className="flex justify-center gap-2 p-4 mb-8 bg-white rounded-lg shadow-md xl:flex-col dark:bg-gray-800">
       <Highlight
-        code="npm i @enhanced-jax/react-browser-containers"
+        code="npm i react-browser-components"
         language="bash"
         theme={darkTheme ? themes[darkCodeTheme] : themes[codeTheme]}
       >

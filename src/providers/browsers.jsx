@@ -1,8 +1,5 @@
-import {
-  ArcBrowser,
-  ChromeBrowser,
-} from "@enhanced-jax/react-browser-containers";
 import { useState } from "react";
+import { ArcBrowser, ChromeBrowser } from "react-browser-components";
 
 function ThemedArcBrowser() {
   const theme = {
@@ -162,7 +159,7 @@ export const browsers = [
     title: "Basic usage",
     Component: <ArcBrowserWithTabs />,
     code: `
-  import { ArcBrowser } from "@enhanced-jax/react-browser-containers";
+  import { ArcBrowser } from "react-browser-components";
   import { useState } from "react";
   
   function ArcBrowserWithTabs() {
@@ -243,7 +240,7 @@ export const browsers = [
       title: "Respect content size (light mode)",
       Component: <ChromeBrowserWithTabs theme="light" />,
       code: `
-    import { ChromeBrowser } from "@enhanced-jax/react-browser-containers";
+    import { ChromeBrowser } from "react-browser-components";
     import { useState } from "react";
     
     function ChromeBrowserWithTabs() {
@@ -324,7 +321,7 @@ export const browsers = [
       title: "Respect content size (dark mode)",
       Component: <ChromeBrowserWithTabs theme="dark" />,
       code: `
-    import { ChromeBrowser } from "@enhanced-jax/react-browser-containers";
+    import { ChromeBrowser } from "react-browser-components";
     import { useState } from "react";
     
     function ChromeBrowserWithTabs() {
@@ -406,7 +403,7 @@ export const browsers = [
     title: "Custom theme",
     Component: <ThemedArcBrowser />,
     code: `
-    import { ArcBrowser } from "@enhanced-jax/react-browser-containers";
+    import { ArcBrowser } from "react-browser-components";
 
     function ThemedArcBrowser() {
   const theme = {

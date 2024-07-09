@@ -7,9 +7,7 @@ export default function CopyButton() {
   const [copied, setCopied] = useState(false);
 
   const copyToClipboard = () => {
-    navigator.clipboard.writeText(
-      "npm i @enhanced-jax/react-browser-containers"
-    );
+    navigator.clipboard.writeText("npm i react-browser-components");
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };

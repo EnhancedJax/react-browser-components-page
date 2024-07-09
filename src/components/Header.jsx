@@ -4,7 +4,7 @@ export default function Header() {
   return (
     <div className="mb-4">
       <h1 className="w-full mb-4 text-4xl font-bold">
-        🪟 React Browser Containers ✨
+        🪟 React Browser Components ✨
       </h1>
       <div className="flex flex-wrap gap-2">
         {badges.map((badge, index) => (
